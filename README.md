@@ -1,5 +1,4 @@
-# 🚀 MailCraft – AI Email Generator Chrome Extension
-
+# 🚀 MailCraft
 MailCraft is an AI-powered Chrome extension that helps users generate professional emails instantly inside Gmail.  
 It refines selected text into clear, well-structured, and professional email responses with a single click, saving time and improving productivity.
 
