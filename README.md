@@ -3,5 +3,5 @@
 ## 🎥 Live Demo
 
 <video width="700" controls>
-  <source src="assets/demo-video.mp4" type="video/mp4">
+  <source src="assets/video.mp4" type="video/mp4">
 </video>
