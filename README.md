@@ -1,4 +1,4 @@
-# MailCraft — AI-Powered Chrome Extension
+# MailCraft — AI-Powered Chrome Extension ✉️🤖
 
 > Refine selected text into clear, well-structured, and professional email responses inside Gmail — with a single click.
 
@@ -33,11 +33,10 @@ Whether you're dealing with a flood of work emails or just struggling to find th
 
 | Layer | Technology | Why It Was Used |
 |---|---|---|
-| **Backend** | Java 21 + Spring Boot | Spring Boot is the gold standard for building production-grade REST APIs in Java. It offers auto-configuration, embedded server, and a massive ecosystem — perfect for quickly scaffolding a robust backend. |
-| **AI Engine** | Google Gemini API | Gemini provides state-of-the-art language understanding and generation capabilities. It's free-tier friendly, fast, and produces high-quality text — ideal for generating natural-sounding email replies. |
-| **Frontend** | HTML + CSS + JavaScript | A lightweight, dependency-free frontend keeps the project simple and fast. No framework overhead — just clean, functional UI that works everywhere without a build step. |
-| **Containerization** | Docker | Docker ensures the app runs identically across all environments (local, staging, production). The Dockerfile packages the Spring Boot JAR into a portable image, eliminating "works on my machine" problems. |
-| **Deployment** | Render | Render supports Docker-based deployments out of the box and offers a free tier for hobby projects. The `render.yaml` file enables Infrastructure-as-Code style deployments for easy CI/CD. |
+| 🖥️ **Backend** | Java 21 + Spring Boot | Spring Boot is the gold standard for building production-grade REST APIs in Java. It offers auto-configuration, embedded server, and a massive ecosystem — perfect for quickly scaffolding a robust backend. |
+| 🤖 **AI Engine** | Google Gemini API | Gemini provides state-of-the-art language understanding and generation capabilities. It's free-tier friendly, fast, and produces high-quality text — ideal for generating natural-sounding email replies. |
+| 🐳 **Containerization** | Docker | Docker ensures the app runs identically across all environments (local, staging, production). The Dockerfile packages the Spring Boot JAR into a portable image, eliminating "works on my machine" problems. |
+| ☁️ **Deployment** | Render | Render supports Docker-based deployments out of the box and offers a free tier for hobby projects. The `render.yaml` file enables Infrastructure-as-Code style deployments for easy CI/CD. |
 
 ---
 
@@ -50,7 +49,7 @@ MailCraft/
 │       ├── java/          # Spring Boot application code
 │       │   └── ...        # Controllers, Services, Models
 │       └── resources/
-│           └── template/    # HTML, CSS, JS frontend files
+│           └── static/    # HTML, CSS, JS frontend files
 ├── .mvn/wrapper/          # Maven wrapper files
 ├── Dockerfile             # Docker image definition
 ├── render.yaml            # Render deployment configuration
@@ -175,6 +174,12 @@ Contributions are welcome! Feel free to open an issue or submit a pull request.
 3. Commit your changes: `git commit -m 'Add your feature'`
 4. Push to the branch: `git push origin feature/your-feature`
 5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is open source. Feel free to use, modify, and distribute it.
 
 ---
 
