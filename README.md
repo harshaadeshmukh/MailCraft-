@@ -1,4 +1,4 @@
-# MailCraft — AI-Powered Chrome Extension for Gmail ✉️🤖
+# MailCraft — AI-Powered Chrome Extension
 
 > Refine selected text into clear, well-structured, and professional email responses inside Gmail — with a single click.
 
