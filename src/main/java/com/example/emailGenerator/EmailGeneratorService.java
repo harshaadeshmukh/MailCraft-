@@ -1,33 +1,54 @@
 package com.example.emailGenerator;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
 public class EmailGeneratorService {
 
+    private static final Logger log = LoggerFactory.getLogger(EmailGeneratorService.class);
+
     private final WebClient webClient;
-    private final String apiKey;
+    private final ApiKeyRotator apiKeyRotator;
 
     public EmailGeneratorService(WebClient.Builder webClientBuilder,
                                  @Value("${gemini.api.url}") String baseURL,
-                                 @Value("${gemini.api.key}") String geminiAPI) {
-        this.apiKey = geminiAPI;
-        this.webClient = webClientBuilder.baseUrl(baseURL).build();
+                                 ApiKeyRotator apiKeyRotator) {
+        this.webClient     = webClientBuilder.baseUrl(baseURL).build();
+        this.apiKeyRotator = apiKeyRotator;
+    }
+    @Cacheable(
+            value = "emailReplies",
+            key   = "#emailRequest.emailContent + '-' + #emailRequest.tone"
+    )
+    public String generateEmailReply(EmailRequest emailRequest) throws Exception {
+        String prompt    = buildPrompt(emailRequest);
+        int totalKeys    = apiKeyRotator.getTotalKeys();
+        Exception lastEx = null;
+
+        // Try every key before giving up
+        for (int attempt = 0; attempt < totalKeys; attempt++) {
+            String currentKey = apiKeyRotator.getNextKey();
+            try {
+                log.info("🚀 Attempt {}/{}", attempt + 1, totalKeys);
+                return callGemini(prompt, currentKey);
+            } catch (Exception e) {
+                log.warn("❌ Key failed on attempt {}: {}", attempt + 1, e.getMessage());
+                lastEx = e;
+            }
+        }
+
+        throw new RuntimeException("All Gemini API keys failed.", lastEx);
     }
 
-    public String generateEmailReply(EmailRequest emailRequest) throws Exception {
-
-        // Build Prompt
-        String prompt = buildPrompt(emailRequest);
-
-        // ✅ Use ObjectMapper to safely build JSON
-        // This automatically escapes quotes, newlines, backslashes etc.
-        // so special characters in emails never break the request
+    private String callGemini(String prompt, String apiKey) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
 
         ObjectNode part    = mapper.createObjectNode().put("text", prompt);
@@ -36,21 +57,15 @@ public class EmailGeneratorService {
         ObjectNode body    = mapper.createObjectNode()
                 .set("contents", mapper.createArrayNode().add(content));
 
-        String requestBody = mapper.writeValueAsString(body);
-
-        // Send request
         String response = webClient.post()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/v1beta/models/gemini-2.5-flash:generateContent")
-                        .build())
+                .uri("/v1beta/models/gemini-2.5-flash:generateContent")
                 .header("x-goog-api-key", apiKey)
                 .header("Content-Type", "application/json")
-                .bodyValue(requestBody)
+                .bodyValue(mapper.writeValueAsString(body))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
 
-        // Extract response
         return extractResponseContent(response);
     }
 

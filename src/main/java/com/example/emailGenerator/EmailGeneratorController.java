@@ -12,11 +12,16 @@ public class EmailGeneratorController {
 
     private final EmailGeneratorService emailGeneratorService;
 
-    // ONLY keep the API endpoint — remove the web routes completely
     @PostMapping("/generate")
     public ResponseEntity<String> generateEmail(
-            @RequestBody EmailRequest emailRequest) throws Exception {
-        String response = emailGeneratorService.generateEmailReply(emailRequest);
-        return ResponseEntity.ok(response);
+            @RequestBody EmailRequest emailRequest) {
+        try {
+            String response = emailGeneratorService.generateEmailReply(emailRequest);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(503)
+                    .body("⏳ All keys are busy. Please try again in a minute.");
+        }
     }
 }
