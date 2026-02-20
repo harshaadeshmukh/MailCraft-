@@ -116,7 +116,7 @@ cd MailCraft
 Go to **Run → Edit Configurations → Environment Variables** and add:
 ```
 GEMINI_API_URL   = https://generativelanguage.googleapis.com
-GEMINI_API_KEYS  = key1,key2,key3,key4,key5
+GEMINI_API_KEYS  = key1,key2,key3,key4,key5 and so on
 REDIS_HOST       = your-upstash-host
 REDIS_PORT       = 6379
 REDIS_PASSWORD   = your-upstash-password
